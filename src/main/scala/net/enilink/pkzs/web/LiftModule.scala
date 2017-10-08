@@ -30,13 +30,6 @@ class LiftModule {
       Menu("pkzs.Formulas", S ? "Formulas") / "pkzs" / "nw" / "static" / "constraints" >> QueryParameters(() => List(("model", PKZS.VOCAB.toString))),
       Menu("pkzs.Vocabulary", S ? "Vocabulary") / "pkzs" / "static" / "ontology" >> QueryParameters(() => List(("model", PKZS.VOCAB.toString))),
 
-      /*Menu("pkzs.Signals", S ? "Signale") / "pkzs" / "signals" >> QueryParameters(() => List(("model", "http://enilink.net/vocab/pkzs/signals"))),
-      Menu("pkzs.Architectures", S ? "Architekturen") / "pkzs" / "architectures" >> QueryParameters(() => List(("model", ""))) submenus (
-        Menu("pkzs.Architecture", S ? "Architektur") / "pkzs" / "architecture" >> Hidden),
-
-        Menu("pkzs.Projekte", S ? "Projekte") / "pkzs" / "projects" >> QueryParameters(() => List(("model", ""))) submenus {
-          Menu("pkzs.Projekt", S ? "Projekt") / "pkzs" / "project" >> Hidden
-        },*/
       // /pkzs/static path to be visible
       Menu(Loc("pkzs.Static", Link(List("pkzs", "static"), true, "/pkzs/static/index"),
         "Static Content", Hidden)))))
