@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>Home</title>
+</head>
+<body class="lift:content_id=main"
+	prefix="
+	rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+	owl: http://www.w3.org/2002/07/owl#
+	rdfs: http://www.w3.org/2000/01/rdf-schema#
+	pkzs: http://enilink.net/eniprod/pkzs#
+	">
+	<div id="main" data-lift="surround?with=default;at=content">
+		<lift:embed what="pkzs/items">
+			<lift:bind-at name="name.singular">Resources</lift:bind-at>
+			<lift:bind-at name="name.plural">Resources</lift:bind-at>
+			<lift:bind-at name="item.type">
+				<div resource="pkzs:Resource"></div>
+			</lift:bind-at>
+			<lift:bind-at name="action.new">New resource</lift:bind-at>
+			<lift:bind-at name="buttons"></lift:bind-at>
+		</lift:embed>
+	</div>
+</body>
+</html>

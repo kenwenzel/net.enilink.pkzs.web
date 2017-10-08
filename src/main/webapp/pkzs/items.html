@@ -1,0 +1,142 @@
+<div
+	prefix="
+	rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+	owl: http://www.w3.org/2002/07/owl#
+	rdfs: http://www.w3.org/2000/01/rdf-schema#
+	pkzs: http://enilink.net/eniprod/pkzs#
+	">
+	<link rel="stylesheet" type="text/css" href="css/common.css"
+		data-lift="head"></link>
+	<style type="text/css" data-lift="head">
+#items>section:nth-child(2n+1) {
+	background-color: #F9F9F9;
+}
+</style>
+	<script data-lift="JS.rdfa"></script>
+	<script data-lift="JS.templates"></script>
+	<script src="js/common.js" data-lift="head"></script>
+	<div id="item-type">
+		<lift:bind name="item.type"></lift:bind>
+	</div>
+	<script type="text/javascript" data-lift="head">
+		$(function() {
+			var itemType = $("#item-type [resource]").attr("resource");
+			var template = '<span about="?this" typeof="' + itemType
+					+ '" data-lift="rdfa">';
+			var thisTemplateName = window.location.pathname;
+			$("#btn-add-item").click(function(e) {
+				var ns = $(this).xmlns();
+				createElement(this, {
+					instanceTemplate : function() {
+						return $(template).prefix(ns);
+					},
+					renderTemplate : function(uri) {
+						return {
+							what : thisTemplateName,
+							template : "item",
+							bind : {
+								item : uri.toString()
+							}
+						};
+					},
+					valueToUri : function(value) {
+						return $.uri(ns["pkzs"] + value);
+					},
+					editableOptions : {
+						success : function(html) {
+							if (html) {
+								var newElem = $(html);
+								$("#items").append(newElem);
+								addHandlers(newElem);
+							}
+						}
+					}
+				});
+			});
+			function addHandlers(parent) {
+				// register delete handler
+				parent.find(".btn-delete-item").click(
+						function() {
+							var self = $(this).closest('[about]');
+							var resource = self.attr("about");
+							if (resource) {
+								resource = $.rdf.resource(resource, {
+									namespaces : self.xmlns()
+								});
+								enilink.rdf.removeResource(resource.toString(),
+										function(success) {
+											if (success) {
+												self.remove();
+											}
+										});
+							}
+						});
+			}
+			addHandlers($(document));
+		});
+	</script>
+	<div data-lift="rdfa">
+		<h3 style="display: inline-block">
+			<lift:bind name="name.plural"></lift:bind>
+		</h3>
+		<div style="text-align: right" class="pull-right">
+			<div class="search-form"></div>
+		</div>
+		<div class="clearfix"></div>
+
+		<div class="search-patterns" data-for="?item" data-param="q"></div>
+		<section class="row header-top">
+			<div class="col-md-6">
+				<h4>
+					<lift:bind name="name.singular"></lift:bind>
+				</h4>
+			</div>
+			<div class="col-md-6">
+				<h4>Type</h4>
+			</div>
+		</section>
+		<div id="items">
+			<section data-t="item" class="asc" about="?item">
+				<div rel="rdf:type">
+					<lift:bind name="item.type"></lift:bind>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<h5 class="row header-fluid">
+							<lift:bind name="name.singular"></lift:bind>
+						</h5>
+						<a href="{app}/describe?model={model}&resource={}&inferred=false"
+							data-lift="rdf.ref?to=href"><span data-lift="rdf.label"></span></a>
+						<lift:bind name="buttons"></lift:bind> 
+						<a class="btn-delete-item btn-hover" href="javascript://"><i
+							class="glyphicon glyphicon-trash"></i></a>
+					</div>
+					<div class="col-md-6 optional">
+						<h5 class="row header-fluid">Type</h5>
+						<div rel="rdf:type" resource="?type" data-filter="isIri(?type)"
+							data-t="type">
+							<!-- show only direct types which are sub-classes of resource class -->
+							<div class="clearable">
+								<div rel="rdfs:subClassOf">
+									<lift:bind name="item.type"></lift:bind>
+								</div>
+								<div rev="rdfs:subClassOf" resource="?otherType"
+									data-filter="?type != ?otherType" class="not-exists">
+									<div rev="rdf:type" resource="?item"></div>
+								</div>
+							</div>
+							<span data-lift="rdf.label"></span>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<section>
+			<a id="btn-add-item" class="btn btn-small" href="javascript:void(0)"><i
+				class="glyphicon glyphicon-plus"></i> <lift:bind name="action.new"></lift:bind></a>
+		</section>
+		<div data-for="?item" data-items="15" class="paginator"></div>
+		<div data-lift="embed?what=editsupport"></div>
+		<!-- textarea class="col-md-12 query"></textarea -->
+	</div>
+</div>

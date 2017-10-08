@@ -1,0 +1,29 @@
+<div prefix="system: http://enilink.net/vocab/xil/system#"
+	class="modal hide fade" aria-hidden="true">
+	<form data-lift="form">
+		<div data-lift="projects.create"></div>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">&times;</button>
+			<h3>Neues Projekt</h3>
+		</div>
+		<div class="modal-body" data-lift="rdfa">
+			<fieldset class="row">
+				<label>Name</label> <input type="text" name="name"
+					placeholder="Name des Projekts…"></input>
+				<div style="padding-bottom: 5px">
+					<span data-lift="bs.alert?id=alert-name"></span>
+				</div>
+				<label>Architektur</label><select class="row"
+					name="architecture">
+					<option about="?a" typeof="system:Architecture" value="?a"
+						class="asc" data-lift="rdf.label"></option>
+				</select>
+			</fieldset>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Abbrechen</a>
+			<button type="submit" class="btn btn-primary">Anlegen</button>
+		</div>
+	</form>
+</div>

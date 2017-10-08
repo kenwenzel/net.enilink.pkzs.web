@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+<title>Home</title>
+</head>
+<body class="lift:content_id=main"
+	prefix="
+	rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+	owl: http://www.w3.org/2002/07/owl#
+	rdfs: http://www.w3.org/2000/01/rdf-schema#
+	pkzs: http://enilink.net/eniprod/pkzs#
+	komma: http://enilink.net/vocab/komma#
+	">
+	<div id="main" data-lift="surround?with=default;at=content">
+		<link rel="stylesheet" type="text/css" href="../css/common.css"
+			data-lift="head"></link>
+		<style type="text/css" data-lift="head">
+body {
+	/* background-color: #E5E5E5; */
+	
+}
+
+a .glyphicon-arrow-up, a .glyphicon-arrow-down {
+	opacity: 0.3;
+}
+
+a .glyphicon-arrow-up:hover, a .glyphicon-arrow-down:hover {
+	opacity: 1.0;
+}
+
+.processes {
+	
+}
+
+.processes li {
+	width: 20em;
+	margin-bottom: 5px;
+	list-style: none;
+	border: 1px solid lightgray;
+	padding: 5px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
+	word-wrap: break-word;
+	background-color: white;
+}
+</style>
+		<script data-lift="JS.templates"></script>
+		<script src="../js/common.js" data-lift="head"></script>
+		<script type="text/javascript" data-lift="head">
+			var precedesSel = '[rel="komma:precedes"]';
+			$(function() {
+				var elements = $(".processes li");
+				// determine partial ordering
+				var edges = elements.map(
+						function() {
+							var self = $(this);
+							var uri = self.attr("resource")
+									|| self.attr("about");
+							return self.find(precedesSel).map(
+									function() {
+										var succ = $(this).attr("resource")
+												|| $(this).attr("about");
+										return [ [ uri, succ ] ];
+									}).get();
+						}).get();
+				// sort elements
+				var prev = null;
+				$.each(toposort(edges), function(index, value) {
+					var element = elements.filter('[resource="' + value
+							+ '"],[about="' + value + '"]');
+					if (prev) {
+						element.insertAfter(prev);
+					}
+					if (element.length) {
+						prev = element;
+					}
+				});
+			});
+			var precedesTpl = '<span rel="komma:precedes" style="display:none">';
+			function updatePrecedence() {
+				var rdfBefore = $.rdf.databank();
+				var rdfAfter = $.rdf.databank();
+				$.each(arguments, function(index, elem) {
+					$.each(elem.rdf().databank.triples(), function(i, triple) {
+						rdfBefore.add(triple);
+					});
+				});
+				$.each(arguments, function(index, elem) {
+					elem.find(precedesSel).remove();
+					var succResource = elem.next().attr("about");
+					if (succResource) {
+						$(precedesTpl).attr("resource", succResource)
+								.prependTo(elem);
+					}
+					$.each(elem.rdf().databank.triples(), function(i, triple) {
+						rdfAfter.add(triple);
+					});
+				});
+				var added = rdfAfter.except(rdfBefore).dump();
+				var removed = rdfBefore.except(rdfAfter).dump();
+				enilink.rdf.updateTriples(added, removed, function(success) {
+					console.log("UPDATE OK: " + success)
+					return false;
+				});
+			}
+			function up() {
+				var self = $(this).closest("li");
+				var pred = self.prev();
+				if (pred.length) {
+					var pred2 = pred.prev();
+					self.slideUp(function() {
+						self.insertBefore(pred);
+						updatePrecedence(pred2, self, pred);
+						self.slideDown();
+					});
+				}
+			}
+			function down() {
+				var self = $(this).closest("li");
+				var succ = self.next();
+				if (succ.length) {
+					var pred = self.prev();
+					self.slideUp(function() {
+						self.insertAfter(succ);
+						updatePrecedence(pred, succ, self);
+						self.slideDown();
+					});
+				}
+			}
+
+			function addHandlers(parent) {
+				parent.find(".glyphicon-arrow-up").closest("a").click(up);
+				parent.find(".glyphicon-arrow-down").closest("a").click(down);
+			}
+			$(function() {
+				addHandlers($(document));
+			});
+
+			// overrides default onadd behavior to insert the nodes in a certain 
+			// positions as well as to register event handlers
+			function onadd(response) {
+				if (response.html) {
+					var newNode = $(response.html);
+					// update precedence relationship
+					var pred = $(".processes li").last();
+					if (pred.length > 0) {
+						$(precedesTpl).attr("resource", newNode.attr("about"))
+								.prependTo(pred);
+					}
+					// insert node and register event handlers
+					$(".processes").append(newNode);
+					enilink.ui.enableEdit(newNode);
+					addHandlers(newNode);
+					return newNode;
+				}
+			}
+		</script>
+		<div about="?this" data-lift="rdfa">
+			<div rev="pkzs:subProcess" resource="?parent" class="optional">
+				<a href="{app}/static/processbp?model={model}&resource={}"
+					data-lift="rdf.ref?to=href"><span data-lift="rdf.label"></span></a>
+				&gt;
+			</div>
+			<h3>
+				<span data-lift="rdf.label"></span>
+			</h3>
+			<ol rel="pkzs:subProcess" class="processes optional">
+				<li about="?teilprozess" data-t="teilprozess"><span
+					rel="komma:precedes" resource="?successor" class="optional"
+					style="display: none"></span>
+					<div style="display: inline;">
+						<a href="{app}/static/processbp?model={model}&resource={}"
+							data-lift="rdf.ref?to=href"><span data-lift="rdf.label"></span></a>
+						<a href="{app}/describe?model={model}&resource={}"
+							data-lift="rdf.ref?to=href" class="btn-hover"><i
+							class="icon-edit"></i></a>
+					</div>
+					<div style="float: right">
+						<a href="javascript://"><i
+							class="glyphicon glyphicon-arrow-up"></i></a><a href="javascript://"><i
+							class="glyphicon glyphicon-arrow-down"></i></a>
+					</div></li>
+			</ol>
+			<ul style="list-style-type: none">
+				<li><div data-rel="pkzs:subProcess" data-add="teilprozess"
+						data-onadd="onadd">
+						<i class="glyphicon glyphicon-plus"></i>
+					</div></li>
+			</ul>
+		</div>
+		<div data-lift="embed?what=editsupport"></div>
+	</div>
+</body>
+</html>

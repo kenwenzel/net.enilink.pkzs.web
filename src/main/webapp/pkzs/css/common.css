@@ -1,0 +1,36 @@
+.header-top {
+	display: none;
+}
+
+.header-fluid {
+	display: block;
+}
+
+@media ( min-width : 768px) {
+	.header-top {
+		display: block;
+	}
+	.header-fluid {
+		display: none;
+	}
+}
+
+.icon-search.facets-add {
+	opacity: 0.3;
+}
+
+.icon-search.facets-add:hover {
+	opacity: 1.0;
+}
+
+.facets i {
+	opacity: 0.5;
+}
+
+.btn-hover {
+	opacity: 0.3;
+}
+
+.btn-hover:hover {
+	opacity: 1.0;
+}

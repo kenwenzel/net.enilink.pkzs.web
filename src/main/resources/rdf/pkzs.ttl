@@ -1,0 +1,1923 @@
+@prefix komma: <http://enilink.net/vocab/komma#> .
+@prefix mathrl: <http://numerateweb.org/vocab/math/rules#> .
+@prefix math: <http://numerateweb.org/vocab/math#> .
+@prefix : <http://enilink.net/eniprod/pkzs#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://enilink.net/eniprod/pkzs> a owl:Ontology ;
+	owl:imports <http://enilink.net/vocab/komma> , <http://numerateweb.org/vocab/math/rules> .
+
+:Bauteilbeschnitt a :ProcessBlueprint .
+
+:Handlingprozess_1 komma:precedes :Platinenzuschnitt ;
+	a :ProcessBlueprint ;
+	rdfs:comment """Einlege- und Entnahmegreifer (Entstapelung und Transport der Platine zum Ofen)
+2 Roboter, 2 Greifer teilen sich 25 s""" .
+
+:Handlingprozess_2 komma:precedes :Platinenerwärmung ;
+	a :ProcessBlueprint ;
+	rdfs:comment """Doppelhandlinggreifer (Transport der Platine vom Ofen zur Presse)
+1 Roboter mit 1 Doppelgreifer""" .
+
+:Handlingprozess_3 komma:precedes :Warmumformung ;
+	a :ProcessBlueprint ;
+	rdfs:comment """Entnahmegreifer aus der Presse
+2 Roboter mit je einem Greifer teilen sich 25 s""" .
+
+:Hartbeschnitt_RessourceA :capacity "2.0"^^xsd:double ;
+	:depreciation "166666.66666666666"^^xsd:double ;
+	:economicLife "15"^^xsd:int ;
+	:inputPowerElectrical "36.67"^^xsd:decimal ;
+	:investmentCosts "2500000.0"^^xsd:double ;
+	:maintenanceCosts "30000"^^xsd:decimal ;
+	:price "2500000"^^xsd:decimal ;
+	:processTime "4"^^xsd:decimal ;
+	:requiredSpace "10"^^xsd:decimal ;
+	a :Resource .
+
+:Hartbeschnitt_mit_RessourceA :costsPerPart "NaN"^^xsd:double ;
+	:costsPerYear "NaN"^^xsd:double ;
+	:energyCosts "NaN"^^xsd:double ;
+	:energyCostsElectrical "2607"^^xsd:integer ;
+	:fullLoadHours "888.888888888889"^^xsd:double ;
+	:imputedInterest "87500"^^xsd:integer ;
+	:machineHourRate "NaN"^^xsd:double ;
+	:maintenanceCosts "30000.0"^^xsd:double ;
+	:maxPartsPerHour "1800"^^xsd:integer ;
+	:occupancyCosts "1600"^^xsd:integer ;
+	:partsPerCycle "2.0"^^xsd:double ;
+	:plan :PlanA ;
+	:processBlueprint :Bauteilbeschnitt ;
+	:processTime "4"^^xsd:decimal ;
+	:resource :Hartbeschnitt_RessourceA ;
+	:resourceCount "0.0"^^xsd:double ;
+	:utilization "0.14814814814814817"^^xsd:double ;
+	a :Process .
+
+:Laserbeschnitt_RessourceA :depreciation "NaN"^^xsd:double ;
+	:investmentCosts "NaN"^^xsd:double ;
+	a :Resource .
+
+:Laserbeschnitt_mit_RessourceA :costsPerPart "NaN"^^xsd:double ;
+	:costsPerYear "NaN"^^xsd:double ;
+	:energyCosts "NaN"^^xsd:double ;
+	:energyCostsElectrical "NaN"^^xsd:double ;
+	:fullLoadHours "NaN"^^xsd:double ;
+	:imputedInterest "NaN"^^xsd:double ;
+	:machineHourRate "NaN"^^xsd:double ;
+	:maintenanceCosts "NaN"^^xsd:double ;
+	:maxPartsPerHour "NaN"^^xsd:double ;
+	:occupancyCosts "NaN"^^xsd:double ;
+	:partsPerCycle "NaN"^^xsd:double ;
+	:processBlueprint :Bauteilbeschnitt ;
+	:resource :Laserbeschnitt_RessourceA ;
+	:resourceCount "NaN"^^xsd:double ;
+	:utilization "NaN"^^xsd:double ;
+	a :Process .
+
+:MasterData a owl:Class ;
+	rdfs:subClassOf owl:Thing .
+
+:MasterDataA :energyPriceElectrical "0.08"^^xsd:decimal ;
+	:energyPriceGas "0.0342"^^xsd:decimal ;
+	:interestRate "0.07"^^xsd:double ;
+	:occupanyCostRate "160"^^xsd:decimal ;
+	:workHoursPerDay "24"^^xsd:int ;
+	:workHoursPerYear "6000"^^xsd:int ;
+	a :MasterData ;
+	rdfs:label "Einfacher Grunddatensatz" .
+
+:PK_Zellstrukturen :subProcess :Bauteilbeschnitt , :Handlingprozess_1 , :Handlingprozess_2 , :Handlingprozess_3 , :Platinenerwärmung , :Platinenzuschnitt , :Warmumformung ;
+	a :ProcessBlueprint ;
+	rdfs:comment "Beschreibung der gesamten Prozesskette Presshärten" ;
+	rdfs:label "Prozesskette Presshärten" .
+
+:Plan mathrl:constraint _:n1 .
+
+_:n1 mathrl:expression _:n2 .
+
+_:n2 math:arguments _:n3 .
+
+_:n3 rdf:first _:n4 .
+
+_:n4 math:arguments _:n5 .
+
+_:n5 rdf:first :partsPerYear ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n4 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n3 rdf:rest _:n6 .
+
+_:n6 rdf:first _:n7 .
+
+_:n7 math:arguments _:n8 .
+
+_:n8 rdf:first :workHoursPerYear ;
+	rdf:rest _:n9 ;
+	a rdf:List .
+
+_:n7 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6 rdf:rest rdf:nil .
+
+_:n3 a rdf:List .
+
+_:n2 math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:n1 mathrl:onProperty :partsPerHour ;
+	a mathrl:Constraint .
+
+:Plan mathrl:constraint _:na .
+
+_:na mathrl:expression _:nb .
+
+_:nb math:arguments _:nc .
+
+_:nc rdf:first _:nd .
+
+_:nd math:value "3600"^^xsd:long ;
+	a math:Literal .
+
+_:nc rdf:rest _:ne .
+
+_:ne rdf:first _:nf .
+
+_:nf math:arguments _:ng .
+
+_:ng rdf:first :partsPerHour ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:nf math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:ne rdf:rest rdf:nil .
+
+_:nc a rdf:List .
+
+_:nb math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:na mathrl:onProperty :taktTime ;
+	a mathrl:Constraint .
+
+:Plan a owl:Class ;
+	rdfs:subClassOf _:nh .
+
+_:nh a owl:Restriction ;
+	owl:allValuesFrom :MasterData ;
+	owl:onProperty :masterData .
+
+:Plan rdfs:subClassOf _:ni .
+
+_:ni a owl:Restriction ;
+	owl:cardinality "1"^^xsd:int ;
+	owl:onProperty :masterData .
+
+:Plan rdfs:subClassOf _:nj .
+
+_:nj a owl:Restriction ;
+	owl:cardinality "1"^^xsd:int ;
+	owl:onProperty :partsPerHour .
+
+:Plan rdfs:subClassOf _:nk .
+
+_:nk a owl:Restriction ;
+	owl:cardinality "1"^^xsd:int ;
+	owl:onProperty :partsPerYear .
+
+:Plan rdfs:subClassOf owl:Thing .
+
+:PlanA :masterData :MasterDataA ;
+	:partsPerHour "266.6666666666667"^^xsd:double ;
+	:partsPerYear "1600000"^^xsd:int ;
+	:taktTime "13.5"^^xsd:double ;
+	a :Plan .
+
+:Platinenerwärmung komma:precedes :Handlingprozess_3 ;
+	a :ProcessBlueprint .
+
+:Platinenerwärmung_RessourceA :capacity "2" ;
+	:costsPerYear "177600.0"^^xsd:double ;
+	:depreciation "80000.0"^^xsd:double ;
+	:economicLife "15"^^xsd:int ;
+	:inputPowerElectrical "2"^^xsd:decimal ;
+	:inputPowerGas "933"^^xsd:decimal ;
+	:investmentCosts "1200000.0"^^xsd:double ;
+	:maintenanceCosts "30000"^^xsd:decimal ;
+	:price "1200000"^^xsd:decimal ;
+	:processTime "25"^^xsd:decimal ;
+	:requiredSpace "160"^^xsd:decimal ;
+	a :Resource .
+
+:Platinenerwärmung_mit_RessourceA :costsPerPart "NaN"^^xsd:double ;
+	:costsPerYear "177600"^^xsd:integer ;
+	:energyCosts "0"^^xsd:integer ;
+	:energyCostsElectrical "0"^^xsd:integer ;
+	:energyCostsGas "0"^^xsd:integer ;
+	:fullLoadHours "0"^^xsd:integer ;
+	:imputedInterest "42000"^^xsd:integer ;
+	:machineHourRate "NaN"^^xsd:double ;
+	:maintenanceCosts "30000.0"^^xsd:double ;
+	:maxPartsPerHour "288"^^xsd:integer ;
+	:occupancyCosts "25600"^^xsd:integer ;
+	:partsPerCycle "2.0"^^xsd:double ;
+	:plan :PlanA ;
+	:processBlueprint :Platinenerwärmung ;
+	:resource :Platinenerwärmung_RessourceA ;
+	:resourceCount "1.0"^^xsd:double ;
+	:utilization "0"^^xsd:integer ;
+	a :ProcessWithGas .
+
+:Platinenzuschnitt komma:precedes :Handlingprozess_2 ;
+	a :ProcessBlueprint .
+
+:Platinenzuschnitt_RessourceA :capacity "2"^^xsd:int ;
+	:depreciation "112047.61904761904"^^xsd:double ;
+	:economicLife "15"^^xsd:int ;
+	:inputPowerElectrical "110"^^xsd:decimal ;
+	:investmentCosts "1595000"^^xsd:integer ;
+	:maintenanceCosts "30000"^^xsd:decimal ;
+	:price "1520000"^^xsd:decimal ;
+	:processTime "2"^^xsd:decimal ;
+	:requiredSpace "35"^^xsd:decimal ;
+	:uses :Platinenzuschnitt_WerkzeugA ;
+	a :Resource .
+
+:Platinenzuschnitt_WerkzeugA :depreciation "10714.285714285714"^^xsd:double ;
+	:economicLife "7"^^xsd:int ;
+	:investmentCosts "75000.0"^^xsd:double ;
+	:maintenanceCosts "7500"^^xsd:decimal ;
+	:price "75000"^^xsd:decimal ;
+	:requiredSpace "0"^^xsd:decimal ;
+	a :Tool .
+
+:Platinenzuschnitt_mit_RessourceA :costsPerPart "0"^^xsd:integer ;
+	:costsPerYear "214883"^^xsd:integer ;
+	:energyCosts "3911"^^xsd:integer ;
+	:energyCostsElectrical "3911"^^xsd:integer ;
+	:fullLoadHours "444.4444444444445"^^xsd:double ;
+	:imputedInterest "55825"^^xsd:integer ;
+	:machineHourRate "483"^^xsd:integer ;
+	:maintenanceCosts "37500"^^xsd:integer ;
+	:maxPartsPerHour "3600.0"^^xsd:double ;
+	:occupancyCosts "5600"^^xsd:integer ;
+	:partsPerCycle "2.0"^^xsd:double ;
+	:plan :PlanA ;
+	:processBlueprint :Platinenzuschnitt ;
+	:resource :Platinenzuschnitt_RessourceA ;
+	:resourceCount "1.0"^^xsd:double ;
+	:utilization "0.07407407407407408"^^xsd:double ;
+	a :Process .
+
+:Presshärten_RessourceA :capacity "2"^^xsd:int ;
+	:depreciation "238095.23809523808"^^xsd:double ;
+	:economicLife "15"^^xsd:int ;
+	:inputPowerElectrical "132"^^xsd:decimal ;
+	:investmentCosts "3000000"^^xsd:integer ;
+	:maintenanceCosts "64500"^^xsd:decimal ;
+	:price "2500000"^^xsd:decimal ;
+	:processTime "25"^^xsd:decimal ;
+	:requiredSpace "10"^^xsd:decimal ;
+	:uses :Presshärten_WerkzeugA ;
+	a :Resource .
+
+:Presshärten_WerkzeugA :depreciation "71428.57142857143"^^xsd:double ;
+	:economicLife "7"^^xsd:int ;
+	:investmentCosts "500000.0"^^xsd:double ;
+	:maintenanceCosts "50000"^^xsd:decimal ;
+	:price "500000"^^xsd:decimal ;
+	:requiredSpace "0"^^xsd:decimal ;
+	a :Tool .
+
+:Presshärten_mit_RessourceA :costsPerPart "0"^^xsd:integer ;
+	:costsPerYear "517861"^^xsd:integer ;
+	:energyCosts "58666"^^xsd:integer ;
+	:energyCostsElectrical "58666"^^xsd:integer ;
+	:fullLoadHours "5555.555555555557"^^xsd:double ;
+	:imputedInterest "105000"^^xsd:integer ;
+	:machineHourRate "93"^^xsd:integer ;
+	:maintenanceCosts "114500"^^xsd:integer ;
+	:maxPartsPerHour "288.0"^^xsd:double ;
+	:occupancyCosts "1600"^^xsd:integer ;
+	:partsPerCycle "2.0"^^xsd:double ;
+	:plan :PlanA ;
+	:processBlueprint :Warmumformung ;
+	:resource :Presshärten_RessourceA ;
+	:resourceCount "1.0"^^xsd:double ;
+	:utilization "0.925925925925926"^^xsd:double ;
+	a :Process .
+
+:Process mathrl:constraint _:nl .
+
+_:nl mathrl:expression _:nm .
+
+_:nm math:arguments _:nn .
+
+_:nn rdf:first _:no .
+
+_:no math:arguments _:np .
+
+_:np rdf:first :costsPerYear ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:no math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:nn rdf:rest _:nq .
+
+_:nq rdf:first _:nr .
+
+_:nr math:arguments _:ns .
+
+_:ns rdf:first :fullLoadHours ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:nr math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:nq rdf:rest rdf:nil .
+
+_:nn a rdf:List .
+
+_:nm math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:nl mathrl:onProperty :machineHourRate ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:nt .
+
+_:nt mathrl:expression _:nu .
+
+_:nu math:arguments _:nv .
+
+_:nv rdf:first _:nw .
+
+_:nw math:arguments _:nx .
+
+_:nx rdf:first :partsPerHour ;
+	rdf:rest _:ny .
+
+_:ny rdf:first _:nz ;
+	rdf:rest rdf:nil .
+
+_:nx a rdf:List .
+
+_:nw math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:nv rdf:rest _:n10 .
+
+_:n10 rdf:first _:n11 .
+
+_:n11 math:arguments _:n12 .
+
+_:n12 rdf:first :maxPartsPerHour ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n11 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n10 rdf:rest rdf:nil .
+
+_:nv a rdf:List .
+
+_:nu math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:nt mathrl:onProperty :utilization ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n13 .
+
+_:n13 mathrl:expression _:n14 .
+
+_:n14 math:arguments _:n15 .
+
+_:n15 rdf:first _:n16 .
+
+_:n16 math:arguments _:n17 .
+
+_:n17 rdf:first _:n18 .
+
+_:n18 math:arguments _:n19 ;
+	math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:n17 rdf:rest _:n1a .
+
+_:n1a rdf:first _:n1b ;
+	rdf:rest rdf:nil .
+
+_:n17 a rdf:List .
+
+_:n16 math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:n15 rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n14 math:operator <http://www.openmath.org/cd/rounding1#ceiling> ;
+	a math:Application .
+
+_:n13 mathrl:onProperty :resourceCount ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n1c .
+
+_:n1c mathrl:expression _:n1d .
+
+_:n1d math:arguments _:n1e .
+
+_:n1e rdf:first _:n1f .
+
+_:n1f math:arguments _:n1g .
+
+_:n1g rdf:first :resourceCount ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n1f math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n1e rdf:rest _:n1h .
+
+_:n1h rdf:first _:n1i .
+
+_:n1i math:arguments _:n1j .
+
+_:n1j rdf:first :capacity ;
+	rdf:rest _:n1k ;
+	a rdf:List .
+
+_:n1i math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n1h rdf:rest rdf:nil .
+
+_:n1e a rdf:List .
+
+_:n1d math:operator <http://www.openmath.org/cd/arith1#times> ;
+	a math:Application .
+
+_:n1c mathrl:onProperty :partsPerCycle ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n1l .
+
+_:n1l mathrl:expression _:n1m .
+
+_:n1m math:arguments _:n1n .
+
+_:n1n rdf:first _:n1o .
+
+_:n1o math:arguments _:n1p .
+
+_:n1p rdf:first _:n1q .
+
+_:n1q math:value "3600"^^xsd:long ;
+	a math:Literal .
+
+_:n1p rdf:rest _:n1r .
+
+_:n1r rdf:first _:n1s ;
+	rdf:rest rdf:nil .
+
+_:n1p a rdf:List .
+
+_:n1o math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:n1n rdf:rest _:n1t .
+
+_:n1t rdf:first _:n1u .
+
+_:n1u math:arguments _:n1v .
+
+_:n1v rdf:first :capacity ;
+	rdf:rest _:n1w ;
+	a rdf:List .
+
+_:n1u math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n1t rdf:rest rdf:nil .
+
+_:n1n a rdf:List .
+
+_:n1m math:operator <http://www.openmath.org/cd/arith1#times> ;
+	a math:Application .
+
+_:n1l mathrl:onProperty :maxPartsPerHour ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n1x .
+
+_:n1x mathrl:expression _:n1y .
+
+_:n1y math:arguments _:n1z .
+
+_:n1z rdf:first _:n20 .
+
+_:n20 math:arguments _:n21 .
+
+_:n21 rdf:first :depreciation ;
+	rdf:rest _:n22 .
+
+_:n22 rdf:first _:n23 ;
+	rdf:rest rdf:nil .
+
+_:n21 a rdf:List .
+
+_:n20 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n1z rdf:rest _:n24 .
+
+_:n24 rdf:first _:n25 .
+
+_:n25 math:arguments _:n26 .
+
+_:n26 rdf:first :imputedInterest ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n25 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n24 rdf:rest _:n27 .
+
+_:n27 rdf:first _:n28 .
+
+_:n28 math:arguments _:n29 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n27 rdf:rest _:n2a .
+
+_:n2a rdf:first _:n2b ;
+	rdf:rest _:n2c .
+
+_:n1z a rdf:List .
+
+_:n1y math:operator <http://www.openmath.org/cd/arith1#plus> ;
+	a math:Application .
+
+_:n1x mathrl:onProperty :costsPerYear ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n2d .
+
+_:n2d mathrl:expression _:n2e .
+
+_:n2e math:arguments _:n2f .
+
+_:n2f rdf:first _:n2g .
+
+_:n2g math:arguments _:n2h .
+
+_:n2h rdf:first :energyCostsElectrical ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n2g math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n2f rdf:rest _:n2i .
+
+_:n2i rdf:first _:n2j .
+
+_:n2j math:arguments _:n2k .
+
+_:n2k rdf:first _:n2l ;
+	rdf:rest _:n2m ;
+	a rdf:List .
+
+_:n2j math:operator <http://www.openmath.org/cd/arith1#sum> ;
+	a math:Application .
+
+_:n2i rdf:rest rdf:nil .
+
+_:n2f a rdf:List .
+
+_:n2e math:operator <http://www.openmath.org/cd/arith1#plus> ;
+	a math:Application .
+
+_:n2d mathrl:onProperty :energyCosts ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n2n .
+
+_:n2n mathrl:expression _:n2o .
+
+_:n2o math:arguments _:n2p .
+
+_:n2p rdf:first _:n2q .
+
+_:n2q math:arguments _:n2r .
+
+_:n2r rdf:first _:n2s .
+
+_:n2s math:arguments _:n2t ;
+	math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:n2r rdf:rest _:n2u .
+
+_:n2u rdf:first _:n2v ;
+	rdf:rest rdf:nil .
+
+_:n2r a rdf:List .
+
+_:n2q math:operator <http://www.openmath.org/cd/arith1#times> ;
+	a math:Application .
+
+_:n2p rdf:rest _:n2w .
+
+_:n2w rdf:first _:n2x .
+
+_:n2x math:arguments _:n2y .
+
+_:n2y rdf:first :partsPerCycle ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n2x math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n2w rdf:rest rdf:nil .
+
+_:n2p a rdf:List .
+
+_:n2o math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:n2n mathrl:onProperty :costsPerPart ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n2z .
+
+_:n2z mathrl:expression _:n30 .
+
+_:n30 math:arguments _:n31 .
+
+_:n31 rdf:first _:n32 .
+
+_:n32 math:arguments _:n33 .
+
+_:n33 rdf:first :maintenanceCosts ;
+	rdf:rest _:n34 .
+
+_:n34 rdf:first _:n35 ;
+	rdf:rest rdf:nil .
+
+_:n33 a rdf:List .
+
+_:n32 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n31 rdf:rest _:n36 .
+
+_:n36 rdf:first _:n37 .
+
+_:n37 math:arguments _:n38 .
+
+_:n38 rdf:first _:n39 ;
+	rdf:rest _:n3a ;
+	a rdf:List .
+
+_:n37 math:operator <http://www.openmath.org/cd/arith1#sum> ;
+	a math:Application .
+
+_:n36 rdf:rest rdf:nil .
+
+_:n31 a rdf:List .
+
+_:n30 math:operator <http://www.openmath.org/cd/arith1#plus> ;
+	a math:Application .
+
+_:n2z mathrl:onProperty :maintenanceCosts ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n3b .
+
+_:n3b mathrl:expression _:n3c .
+
+_:n3c math:arguments _:n3d .
+
+_:n3d rdf:first _:n3e .
+
+_:n3e math:arguments _:n3f .
+
+_:n3f rdf:first :requiredSpace ;
+	rdf:rest _:n3g .
+
+_:n3g rdf:first _:n3h ;
+	rdf:rest rdf:nil .
+
+_:n3f a rdf:List .
+
+_:n3e math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n3d rdf:rest _:n3i .
+
+_:n3i rdf:first _:n3j .
+
+_:n3j math:arguments _:n3k .
+
+_:n3k rdf:first :occupanyCostRate ;
+	rdf:rest _:n3l ;
+	a rdf:List .
+
+_:n3j math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n3i rdf:rest rdf:nil .
+
+_:n3d a rdf:List .
+
+_:n3c math:operator <http://www.openmath.org/cd/arith1#times> ;
+	a math:Application .
+
+_:n3b mathrl:onProperty :occupancyCosts ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n3m .
+
+_:n3m mathrl:expression _:n3n .
+
+_:n3n math:arguments _:n3o .
+
+_:n3o rdf:first _:n3p .
+
+_:n3p math:arguments _:n3q .
+
+_:n3q rdf:first :utilization ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n3p math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n3o rdf:rest _:n3r .
+
+_:n3r rdf:first _:n3s .
+
+_:n3s math:arguments _:n3t .
+
+_:n3t rdf:first :workHoursPerYear ;
+	rdf:rest _:n3u ;
+	a rdf:List .
+
+_:n3s math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n3r rdf:rest rdf:nil .
+
+_:n3o a rdf:List .
+
+_:n3n math:operator <http://www.openmath.org/cd/arith1#times> ;
+	a math:Application .
+
+_:n3m mathrl:onProperty :fullLoadHours ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n3v .
+
+_:n3v mathrl:expression _:n3w .
+
+_:n3w math:arguments _:n3x .
+
+_:n3x rdf:first _:n3y .
+
+_:n3y math:arguments _:n3z .
+
+_:n3z rdf:first _:n40 .
+
+_:n40 math:arguments _:n41 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n3z rdf:rest _:n42 .
+
+_:n42 rdf:first _:n43 ;
+	rdf:rest rdf:nil .
+
+_:n3z a rdf:List .
+
+_:n3y math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:n3x rdf:rest _:n44 .
+
+_:n44 rdf:first _:n45 .
+
+_:n45 math:arguments _:n46 .
+
+_:n46 rdf:first :interestRate ;
+	rdf:rest _:n47 ;
+	a rdf:List .
+
+_:n45 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n44 rdf:rest rdf:nil .
+
+_:n3x a rdf:List .
+
+_:n3w math:operator <http://www.openmath.org/cd/arith1#times> ;
+	a math:Application .
+
+_:n3v mathrl:onProperty :imputedInterest ;
+	a mathrl:Constraint .
+
+:Process mathrl:constraint _:n48 .
+
+_:n48 mathrl:expression _:n49 .
+
+_:n49 math:arguments _:n4a .
+
+_:n4a rdf:first _:n4b .
+
+_:n4b math:arguments _:n4c .
+
+_:n4c rdf:first :inputPowerElectrical ;
+	rdf:rest _:n4d .
+
+_:n4d rdf:first _:n4e ;
+	rdf:rest rdf:nil .
+
+_:n4c a rdf:List .
+
+_:n4b math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n4a rdf:rest _:n4f .
+
+_:n4f rdf:first _:n4g .
+
+_:n4g math:arguments _:n4h .
+
+_:n4h rdf:first :energyPriceElectrical ;
+	rdf:rest _:n4i ;
+	a rdf:List .
+
+_:n4g math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n4f rdf:rest _:n4j .
+
+_:n4j rdf:first _:n4k .
+
+_:n4k math:arguments _:n4l ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n4j rdf:rest rdf:nil .
+
+_:n4a a rdf:List .
+
+_:n49 math:operator <http://www.openmath.org/cd/arith1#times> ;
+	a math:Application .
+
+_:n48 mathrl:onProperty :energyCostsElectrical ;
+	a mathrl:Constraint .
+
+:Process a owl:Class ;
+	rdfs:subClassOf _:n4m .
+
+_:n4m a owl:Restriction ;
+	owl:onProperty :processBlueprint ;
+	owl:someValuesFrom :ProcessBlueprint .
+
+:Process rdfs:subClassOf _:n4n .
+
+_:n4n a owl:Restriction ;
+	owl:onProperty :resource ;
+	owl:someValuesFrom :Resource .
+
+:Process rdfs:subClassOf _:n4o .
+
+_:n4o a owl:Restriction ;
+	owl:onProperty :plan ;
+	owl:someValuesFrom :Plan .
+
+:Process rdfs:subClassOf owl:Thing .
+
+:ProcessBlueprint a owl:Class ;
+	rdfs:subClassOf _:n4p .
+
+_:n4p a owl:Restriction ;
+	owl:onProperty :subProcess ;
+	owl:someValuesFrom :ProcessBlueprint .
+
+:ProcessBlueprint rdfs:subClassOf owl:Thing .
+
+:ProcessWithGas mathrl:constraint _:n4q .
+
+_:n4q mathrl:expression _:n4r .
+
+_:n4r math:arguments _:n4s .
+
+_:n4s rdf:first _:n4t .
+
+_:n4t math:arguments _:n4u .
+
+_:n4u rdf:first :inputPowerGas ;
+	rdf:rest _:n4v .
+
+_:n4v rdf:first _:n4w ;
+	rdf:rest rdf:nil .
+
+_:n4u a rdf:List .
+
+_:n4t math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n4s rdf:rest _:n4x .
+
+_:n4x rdf:first _:n4y .
+
+_:n4y math:arguments _:n4z .
+
+_:n4z rdf:first :energyPriceGas ;
+	rdf:rest _:n50 ;
+	a rdf:List .
+
+_:n4y math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n4x rdf:rest _:n51 .
+
+_:n51 rdf:first _:n52 .
+
+_:n52 math:arguments _:n53 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n51 rdf:rest rdf:nil .
+
+_:n4s a rdf:List .
+
+_:n4r math:operator <http://www.openmath.org/cd/arith1#times> ;
+	a math:Application .
+
+_:n4q mathrl:onProperty :energyCostsGas ;
+	a mathrl:Constraint .
+
+:ProcessWithGas a owl:Class ;
+	rdfs:subClassOf :Process .
+
+:Resource mathrl:constraint _:n54 .
+
+_:n54 mathrl:expression _:n55 .
+
+_:n55 math:arguments _:n56 .
+
+_:n56 rdf:first _:n57 .
+
+_:n57 math:arguments _:n58 .
+
+_:n58 rdf:first :price ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n57 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n56 rdf:rest _:n59 .
+
+_:n59 rdf:first _:n5a .
+
+_:n5a math:arguments _:n5b .
+
+_:n5b rdf:first _:n5c ;
+	rdf:rest _:n5d ;
+	a rdf:List .
+
+_:n5a math:operator <http://www.openmath.org/cd/arith1#sum> ;
+	a math:Application .
+
+_:n59 rdf:rest rdf:nil .
+
+_:n56 a rdf:List .
+
+_:n55 math:operator <http://www.openmath.org/cd/arith1#plus> ;
+	a math:Application .
+
+_:n54 mathrl:onProperty :investmentCosts ;
+	a mathrl:Constraint .
+
+:Resource mathrl:constraint _:n5e .
+
+_:n5e mathrl:expression _:n5f .
+
+_:n5f math:arguments _:n5g .
+
+_:n5g rdf:first _:n5h .
+
+_:n5h math:arguments _:n5i .
+
+_:n5i rdf:first _:n5j .
+
+_:n5j math:arguments _:n5k ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n5i rdf:rest _:n5l .
+
+_:n5l rdf:first _:n5m ;
+	rdf:rest rdf:nil .
+
+_:n5i a rdf:List .
+
+_:n5h math:operator <http://www.openmath.org/cd/arith1#divide> ;
+	a math:Application .
+
+_:n5g rdf:rest _:n5n .
+
+_:n5n rdf:first _:n5o .
+
+_:n5o math:arguments _:n5p .
+
+_:n5p rdf:first _:n5q ;
+	rdf:rest _:n5r ;
+	a rdf:List .
+
+_:n5o math:operator <http://www.openmath.org/cd/arith1#sum> ;
+	a math:Application .
+
+_:n5n rdf:rest rdf:nil .
+
+_:n5g a rdf:List .
+
+_:n5f math:operator <http://www.openmath.org/cd/arith1#plus> ;
+	a math:Application .
+
+_:n5e mathrl:onProperty :depreciation ;
+	a mathrl:Constraint .
+
+:Resource a owl:Class ;
+	rdfs:subClassOf _:n5s .
+
+_:n5s a owl:Restriction ;
+	owl:cardinality "1"^^xsd:int ;
+	owl:onProperty :investmentCosts .
+
+:Resource rdfs:subClassOf _:n5t .
+
+_:n5t a owl:Restriction ;
+	owl:cardinality "1"^^xsd:int ;
+	owl:onProperty :economicLife .
+
+:Resource rdfs:subClassOf _:n5u .
+
+_:n5u a owl:Restriction ;
+	owl:cardinality "1"^^xsd:int ;
+	owl:onProperty :requiredSpace .
+
+:Resource rdfs:subClassOf _:n5v .
+
+_:n5v a owl:Restriction ;
+	owl:cardinality "1"^^xsd:int ;
+	owl:onProperty :inputPowerElectrical .
+
+:Resource rdfs:subClassOf _:n5w .
+
+_:n5w a owl:Restriction ;
+	owl:allValuesFrom :Tool ;
+	owl:onProperty :uses .
+
+:Resource rdfs:subClassOf owl:Thing .
+
+:Tool a owl:Class ;
+	rdfs:subClassOf :Resource .
+
+:Warmumformung komma:precedes :Bauteilbeschnitt ;
+	a :ProcessBlueprint .
+
+:capacity a owl:DatatypeProperty ;
+	rdfs:comment "Menge der Teile, die pro Bearbeitung hergestellt werden können." ;
+	rdfs:range xsd:int ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:commonProperty a owl:DatatypeProperty ;
+	rdfs:subPropertyOf owl:topDataProperty .
+
+:costsPerPart a owl:DatatypeProperty ;
+	rdfs:label "Kosten pro Teil [€]" ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:costsPerYear a owl:DatatypeProperty ;
+	rdfs:label "Jährliche maschinenabhängige Kosten [€/Jahr]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :commonProperty .
+
+:depreciation a owl:DatatypeProperty ;
+	rdfs:label "Depreciation [€/Year]"@en , "Abschreibung [€/Jahr]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:economicLife a owl:DatatypeProperty ;
+	rdfs:label "Economic Life [Years]"@en , "Nutzungsdauer [Jahre]" ;
+	rdfs:range xsd:int ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:energyCosts a owl:DatatypeProperty ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:energyCostsElectrical a owl:DatatypeProperty ;
+	rdfs:label "Energiekosten elektrisch [€/Jahr]" ;
+	rdfs:range xsd:double ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:energyCostsGas a owl:DatatypeProperty ;
+	rdfs:label "Energiekosten Erdgas [€/Jahr]" ;
+	rdfs:range xsd:double ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:energyPriceElectrical a owl:DatatypeProperty ;
+	rdfs:label "Energiepreis elektrisch [€/kWh]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:energyPriceGas a owl:DatatypeProperty ;
+	rdfs:label "Energiepreis Erdgas [€/kWh]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:fullLoadHours a owl:DatatypeProperty ;
+	rdfs:label "Lastlaufzeit [h/Jahr]" ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:imputedInterest a owl:DatatypeProperty ;
+	rdfs:label "kalkulatorische Zinsen [€/Jahr]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:inputPowerElectrical a owl:DatatypeProperty ;
+	rdfs:label "Input power electrical [kW]"@en , "Leistungsaufnahme elektrisch [kW]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:inputPowerGas a owl:DatatypeProperty ;
+	rdfs:label "Leistungsaufnahme Erdgas [kW]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:interestRate a owl:DatatypeProperty ;
+	rdfs:label "Zinssatz" ;
+	rdfs:range xsd:double ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:investmentCosts a owl:DatatypeProperty ;
+	rdfs:label "Investment costs [€]"@en , "Anschaffungskosten [€]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:machineHourRate a owl:DatatypeProperty ;
+	rdfs:label "Maschinenstundensatz Platinenzuschnitt [€/h]" ;
+	rdfs:range xsd:double ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:maintenanceCosts a owl:DatatypeProperty ;
+	rdfs:label "Maintenance costs [€/Year]"@en , "Instandhaltungskosten [€/Jahr]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:masterData a owl:ObjectProperty ;
+	rdfs:subPropertyOf owl:topObjectProperty .
+
+:masterDataProperty a owl:DatatypeProperty ;
+	rdfs:subPropertyOf owl:topDataProperty .
+
+:maxPartsPerHour a owl:DatatypeProperty ;
+	rdfs:comment """maximale Produktionsmenge bei Vollauslastung (100%) pro Stunde
+""" ;
+	rdfs:label "Maximale Produktionsmenge pro Stunde" ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:occupancyCosts a owl:DatatypeProperty ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:occupanyCostRate a owl:DatatypeProperty ;
+	rdfs:label "Raumkostensatz [€/m²]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:outputPerDay a owl:DatatypeProperty ;
+	rdfs:label "Produktionsmenge pro Tag" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:outputPerYear a owl:DatatypeProperty ;
+	rdfs:label "Produktionsmenge pro Jahr" ;
+	rdfs:range xsd:int ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:partsPerCycle a owl:DatatypeProperty ;
+	rdfs:comment "Menge der Teile, die innerhalb des Taktes hergestellt werden bzw. Menge der Teile, auf die sich die Kosten verteilen" ;
+	rdfs:label "Teile pro Takt" ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:partsPerHour a owl:DatatypeProperty ;
+	rdfs:label "Produktionsmenge pro Stunde" ;
+	rdfs:range xsd:double ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:partsPerYear a owl:DatatypeProperty ;
+	rdfs:label "Produktionsmenge pro Jahr" ;
+	rdfs:range xsd:int ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:plan a owl:ObjectProperty .
+
+:price a owl:DatatypeProperty ;
+	rdfs:label "Price [€]"@en , "Kaufpreis [€]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:processBlueprint a owl:ObjectProperty ;
+	rdfs:subPropertyOf owl:topObjectProperty .
+
+:processProperty a owl:DatatypeProperty ;
+	rdfs:label "Taktzeit pro Prozessschritt [s]" ;
+	rdfs:range xsd:double ;
+	rdfs:subPropertyOf owl:topDataProperty .
+
+:processTime a owl:DatatypeProperty ;
+	rdfs:comment "Zeitdauer, die für eine einzelne Bearbeitung benötigt wird. [s]" ;
+	rdfs:label "Process time [s]"@en , "Bearbeitungszeit [s]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:requiredSpace a owl:DatatypeProperty ;
+	rdfs:label "Required space [m²]"@en , "Flächenbedarf [m²]" ;
+	rdfs:range xsd:decimal ;
+	rdfs:subPropertyOf :resourceProperty .
+
+:resource a owl:ObjectProperty ;
+	rdfs:subPropertyOf owl:topObjectProperty .
+
+:resourceCount a owl:DatatypeProperty ;
+	rdfs:comment "Anzahl der notwendigen Ressourcen für die Erfüllung der im Plan vorgegebenen Taktzeit." ;
+	rdfs:range xsd:int ;
+	rdfs:subPropertyOf :resourceProcessProperty .
+
+:resourceProcessProperty a owl:DatatypeProperty ;
+	rdfs:label "Raumkosten [€/Jahr]" ;
+	rdfs:subPropertyOf owl:topDataProperty .
+
+:resourceProperty a owl:DatatypeProperty ;
+	rdfs:subPropertyOf owl:topDataProperty .
+
+:subProcess a owl:ObjectProperty ;
+	rdfs:subPropertyOf komma:orderedContains .
+
+:taktTime a owl:DatatypeProperty ;
+	rdfs:subPropertyOf :commonProperty .
+
+:uses a owl:ObjectProperty ;
+	rdfs:subPropertyOf owl:topObjectProperty .
+
+:utilization a owl:DatatypeProperty ;
+	rdfs:label "Auslastung" ;
+	rdfs:subPropertyOf :commonProperty .
+
+:workHoursPerDay a owl:DatatypeProperty ;
+	rdfs:label "Arbeitsstunden pro Tag [h/Tag]" ;
+	rdfs:range xsd:int ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+:workHoursPerYear a owl:DatatypeProperty ;
+	rdfs:label "Arbeitsstunden pro Jahr [h/Jahr]" ;
+	rdfs:range xsd:int ;
+	rdfs:subPropertyOf :masterDataProperty .
+
+<http://www.openmath.org/cd/arith1#divide> a math:Symbol .
+
+<http://www.openmath.org/cd/arith1#times> a math:Symbol .
+
+<http://www.openmath.org/cd/rdf#resource> a math:Symbol .
+
+<http://www.openmath.org/cd/rdf#value> a math:Symbol .
+
+<urn:symbol:gd> a math:Symbol .
+
+_:n9 rdf:first _:n5x ;
+	rdf:rest rdf:nil .
+
+_:nz math:arguments _:n65 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n19 rdf:first _:n66 ;
+	rdf:rest _:n67 ;
+	a rdf:List .
+
+_:n1b math:arguments _:n6g ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n1k rdf:first _:n6k ;
+	rdf:rest rdf:nil .
+
+_:n1s math:arguments _:n6m ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n1w rdf:first _:n6q ;
+	rdf:rest rdf:nil .
+
+_:n23 math:arguments _:n6s ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n29 rdf:first :occupancyCosts ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n2b math:arguments _:n6t ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n2c rdf:first _:n6u ;
+	rdf:rest rdf:nil .
+
+_:n2l math:arguments _:n6w ;
+	math:operator <http://www.openmath.org/cd/rdf#valueset> ;
+	a math:Application .
+
+_:n2m rdf:first _:n6x ;
+	rdf:rest rdf:nil .
+
+_:n2t rdf:first _:n71 ;
+	rdf:rest _:n72 ;
+	a rdf:List .
+
+_:n2v math:arguments _:n75 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n35 math:arguments _:n7o ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n39 math:arguments _:n8r ;
+	math:operator <http://www.openmath.org/cd/rdf#valueset> ;
+	a math:Application .
+
+_:n3a rdf:first _:n8z ;
+	rdf:rest rdf:nil .
+
+_:n3h math:arguments _:n95 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n3l rdf:first _:n96 ;
+	rdf:rest rdf:nil .
+
+_:n3u rdf:first _:n9a ;
+	rdf:rest rdf:nil .
+
+_:n41 rdf:first :investmentCosts ;
+	rdf:rest _:n9e ;
+	a rdf:List .
+
+_:n43 math:value "2"^^xsd:long ;
+	a math:Literal .
+
+_:n47 rdf:first _:n9h ;
+	rdf:rest rdf:nil .
+
+_:n4e math:arguments _:n5z ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n4i rdf:first _:n60 ;
+	rdf:rest rdf:nil .
+
+_:n4l rdf:first :fullLoadHours ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n4w math:arguments _:n79 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n50 rdf:first _:n7a ;
+	rdf:rest rdf:nil .
+
+_:n53 rdf:first :fullLoadHours ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n5c math:arguments _:n7f ;
+	math:operator <http://www.openmath.org/cd/rdf#valueset> ;
+	a math:Application .
+
+_:n5d rdf:first _:n7g ;
+	rdf:rest rdf:nil .
+
+_:n5k rdf:first :price ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n5m math:arguments _:n7n ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n5q math:arguments _:n7p ;
+	math:operator <http://www.openmath.org/cd/rdf#valueset> ;
+	a math:Application .
+
+_:n5r rdf:first _:n7q ;
+	rdf:rest rdf:nil .
+
+_:n5x math:arguments _:n5y ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n5y rdf:first :masterData ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n5z rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n60 math:arguments _:n61 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n61 rdf:first :masterData ;
+	rdf:rest _:n62 ;
+	a rdf:List .
+
+_:n62 rdf:first _:n63 ;
+	rdf:rest rdf:nil .
+
+_:n63 math:arguments _:n64 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n64 rdf:first :plan ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n65 rdf:first :plan ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n66 math:arguments _:n68 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n67 rdf:first _:n6c ;
+	rdf:rest rdf:nil .
+
+_:n68 rdf:first :processTime ;
+	rdf:rest _:n69 ;
+	a rdf:List .
+
+_:n69 rdf:first _:n6a ;
+	rdf:rest rdf:nil .
+
+_:n6a math:arguments _:n6b ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6b rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6c math:arguments _:n6d ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6d rdf:first :capacity ;
+	rdf:rest _:n6e ;
+	a rdf:List .
+
+_:n6e rdf:first _:n6f ;
+	rdf:rest rdf:nil .
+
+_:n6f math:arguments _:n81 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6g rdf:first :taktTime ;
+	rdf:rest _:n6h ;
+	a rdf:List .
+
+_:n6h rdf:first _:n6i ;
+	rdf:rest rdf:nil .
+
+_:n6i math:arguments _:n6j ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6j rdf:first :plan ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6k math:arguments _:n6l ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6l rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6m rdf:first :processTime ;
+	rdf:rest _:n6n ;
+	a rdf:List .
+
+_:n6n rdf:first _:n6o ;
+	rdf:rest rdf:nil .
+
+_:n6o math:arguments _:n6p ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6p rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6q math:arguments _:n6r ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6r rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6s rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6t rdf:first :maintenanceCosts ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6u math:arguments _:n6v ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n6v rdf:first :energyCosts ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6w rdf:first :energyCostsGas ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n6x math:binder <http://www.openmath.org/cd/fns1#lambda> ;
+	math:body _:n6y ;
+	math:variables _:n6z ;
+	a math:Binding .
+
+_:n6y math:name "c" ;
+	a math:Variable .
+
+_:n6z rdf:first _:n70 ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n70 math:name "c" ;
+	a math:Variable .
+
+_:n71 math:arguments _:n73 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n72 rdf:first _:n74 ;
+	rdf:rest rdf:nil .
+
+_:n73 rdf:first :machineHourRate ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n74 math:value "3600"^^xsd:integer ;
+	a math:Literal .
+
+_:n75 rdf:first :taktTime ;
+	rdf:rest _:n76 ;
+	a rdf:List .
+
+_:n76 rdf:first _:n77 ;
+	rdf:rest rdf:nil .
+
+_:n77 math:arguments _:n78 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n78 rdf:first :plan ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n79 rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7a math:arguments _:n7b ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n7b rdf:first :masterData ;
+	rdf:rest _:n7c ;
+	a rdf:List .
+
+_:n7c rdf:first _:n7d ;
+	rdf:rest rdf:nil .
+
+_:n7d math:arguments _:n7e ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n7e rdf:first :plan ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7f rdf:first :uses ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7g math:binder <http://www.openmath.org/cd/fns1#lambda> ;
+	math:body _:n7h ;
+	math:variables _:n7i ;
+	a math:Binding .
+
+_:n7h math:arguments _:n7j ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n7i rdf:first _:n7m ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7j rdf:first :investmentCosts ;
+	rdf:rest _:n7k ;
+	a rdf:List .
+
+_:n7k rdf:first _:n7l ;
+	rdf:rest rdf:nil .
+
+_:n7l math:name "w" ;
+	a math:Variable .
+
+_:n7m math:name "w" ;
+	a math:Variable .
+
+_:n7n rdf:first :economicLife ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7o rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7p rdf:first :uses ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7q math:binder <http://www.openmath.org/cd/fns1#lambda> ;
+	math:body _:n7r ;
+	math:variables _:n7s ;
+	a math:Binding .
+
+_:n7r math:arguments _:n7t ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n7s rdf:first _:n7w ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7t rdf:first :depreciation ;
+	rdf:rest _:n7u ;
+	a rdf:List .
+
+_:n7u rdf:first _:n7v ;
+	rdf:rest rdf:nil .
+
+_:n7v math:name "w" ;
+	a math:Variable .
+
+_:n7w math:name "w" ;
+	a math:Variable .
+
+_:n7x math:name "w" ;
+	a math:Variable .
+
+_:n7y rdf:first :plan ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n7z rdf:first :plan ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n80 rdf:first :plan ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n81 rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n82 owl:onProperty math:operator .
+
+_:n83 owl:onProperty math:operator .
+
+_:n84 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n85 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n86 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n87 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n88 math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n89 math:operator <http://www.openmath.org/cd/rdf#resource> ;
+	a math:Application .
+
+_:n8a math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8b math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8c math:operator <http://www.openmath.org/cd/rdf#resource> ;
+	a math:Application .
+
+_:n8d math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8e math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8f math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8g math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8h math:operator <http://www.openmath.org/cd/rdf#resource> ;
+	a math:Application .
+
+_:n8i math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8j math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8k math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8l math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8m math:operator <http://www.openmath.org/cd/rdf#resource> ;
+	a math:Application .
+
+_:n8n math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8o math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8p math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8q math:operator <http://www.openmath.org/cd/rdf#resource> ;
+	a math:Application .
+
+_:n8r rdf:first :uses ;
+	rdf:rest _:n8w ;
+	a rdf:List .
+
+_:n8s math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8t math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8u math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8v math:operator <http://www.openmath.org/cd/rdf#resource> ;
+	a math:Application .
+
+_:n8w rdf:first _:n8x ;
+	rdf:rest rdf:nil .
+
+_:n8x math:arguments _:n8y ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n8y rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n8z math:binder <http://www.openmath.org/cd/fns1#lambda> ;
+	math:body _:n90 ;
+	math:variables _:n91 ;
+	a math:Binding .
+
+_:n90 math:arguments _:n92 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n91 rdf:first _:n94 ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n92 rdf:first :maintenanceCosts ;
+	rdf:rest _:n93 ;
+	a rdf:List .
+
+_:n93 rdf:first _:n7x ;
+	rdf:rest rdf:nil .
+
+_:n94 math:name "w" ;
+	a math:Variable .
+
+_:n95 rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n96 math:arguments _:n97 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n97 rdf:first :masterData ;
+	rdf:rest _:n98 ;
+	a rdf:List .
+
+_:n98 rdf:first _:n99 ;
+	rdf:rest rdf:nil .
+
+_:n99 math:arguments _:n7y ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n9a math:arguments _:n9b ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n9b rdf:first :masterData ;
+	rdf:rest _:n9c ;
+	a rdf:List .
+
+_:n9c rdf:first _:n9d ;
+	rdf:rest rdf:nil .
+
+_:n9d math:arguments _:n7z ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n9e rdf:first _:n9f ;
+	rdf:rest rdf:nil .
+
+_:n9f math:arguments _:n9g ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n9g rdf:first :resource ;
+	rdf:rest rdf:nil ;
+	a rdf:List .
+
+_:n9h math:arguments _:n9i ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
+
+_:n9i rdf:first :masterData ;
+	rdf:rest _:n9j ;
+	a rdf:List .
+
+_:n9j rdf:first _:n9k ;
+	rdf:rest rdf:nil .
+
+_:n9k math:arguments _:n80 ;
+	math:operator <http://www.openmath.org/cd/rdf#value> ;
+	a math:Application .
